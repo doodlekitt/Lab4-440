@@ -1,26 +1,54 @@
-import java.lang.String;
 import java.util.List;
+import java.util.HashMap;
 
-class DNACluster extends ICluster<String> {
-    public List<String> generate(String[] args) {
+class DNACluster extends ICluster<char[]> {
+    public List<char[]> generate(String[] args) {
         // TODO: Implement
         return null;
     }
 
-    public int distance(String strand1, String strand2) {
+    public int distance(char[] strand1, char[] strand2) {
         if(strand1 == null || strand2 == null ||
-           strand1.length() != strand2.length()) {
+           strand1.length != strand2.length) {
             return -1;
         }
         int dist = 0;
-        for(int i = 0; i < strand1.length(); i++) {
-            if(strand1.substring(i, i+1) != strand2.substring(i, i+1))
+        for(int i = 0; i < strand1.length; i++) {
+            if(strand1[i] != strand2[i])
                 dist++;
         }
         return dist;
     }
 
-    public String mean(List<String> strands) {
-        return "";
+    // Assumes all strings of same length
+    public char[] mean(List<char[]> strands) {
+        if(strands == null || strands.size() == 0)
+            return null;
+        int strlen = strands.get(0).length;
+        char[] mean = new char[strlen];
+        for(int i = 0; i < strlen; i++) {
+            // find the character which occurs most frequently
+            HashMap<Character, Integer> freqs =
+                new HashMap<Character, Integer>();
+            for(char[] strand : strands) {
+                char c = strand[i];
+                if(!freqs.containsKey(c)) {
+                    freqs.put(c, 1);
+                } else {
+                    int freq = freqs.get(c);
+                    freqs.put(c, freq);
+                }
+            }
+            int max = 0;
+            char maxchar = 'G';
+            for(Character c : freqs.keySet()) {
+                if(freqs.get(c) > max) {
+                    max = freqs.get(c);
+                    maxchar = c;
+                }
+            }
+            mean[i] = maxchar;
+        }
+        return mean;
     }
 }
