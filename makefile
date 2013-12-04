@@ -6,6 +6,7 @@ JC = javac
 
 CLASSES = \
         ICluster.java \
+        DNACluster.java
 
 default: classes
 

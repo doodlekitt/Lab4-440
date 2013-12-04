@@ -1,15 +1,22 @@
-// An interface for k-means clustering
-public interface ICluster<E> {
-    public List<E> Generate(String[] args);
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
-    public int Distance(E elem1, E elem2);
+// An abstract class for k-means clustering
+public abstract class ICluster<E> {
+    public abstract List<E> generate(String[] args);
 
-    public List<E> SequentialCluster(List<E> data, int k, int mu) {
+    public abstract int distance(E elem1, E elem2);
+
+    public abstract E mean(List<E> elements);
+
+    public List<E> sequentialCluster(List<E> data, int k, int mu) {
         // if k >= length of data, data are the centroids
         if(k >= data.size())
             return data;
         if(k <= 0)
-            return new List<E>(); // return empty list
+            return new ArrayList<E>(); // return empty list
 
         // Pick initial centroids by choosing random data points
         Collections.shuffle(data);
@@ -26,7 +33,7 @@ public interface ICluster<E> {
                 int mindist = Integer.MAX_VALUE;
                 E mincent = null;
                 for(E c : centroids) {
-                    int dist = Distance(elem, c);
+                    int dist = distance(elem, c);
                     if(dist < mindist) {
                         mindist = dist;
                         mincent = c;
@@ -38,11 +45,16 @@ public interface ICluster<E> {
                 clusters.put(mincent, cluster);
             }
             // Reevaluate centroids
-            for(E c : clusters.keySet()) {
-                // find mean 
+            centroids = new ArrayList<E>();
+            for(List<E> cluster : clusters.values()) {
+                E centroid = mean(cluster);
+                centroids.add(centroid);
             }
         }
+        return centroids;
     }
 
-    public E[] ParallelCluster(E[] data);
+    public List<E> parallelCluster(E[] data) {
+        return null;
+    }
 }
