@@ -1,17 +1,11 @@
 JCFLAGS = -g
-JC = javac
+JC = mpijavac
 .SUFFIXES: .java .class
 .java.class:
 	$(JC) $(JFLAGS) $*.java
 
-CLASSES = \
-        ICluster.java \
-        DataCluster.java \
-        DNACluster.java
-
-default: classes
-
-classes: $(CLASSES:.java=.class)
+default: DataCluster.java DNACluster.java ICluster.java
+	$(JC) $(JCFLAGS) DataCluster.java DNACluster.java ICluster.java
 
 clean:
 	$(RM) *.class

@@ -1,3 +1,4 @@
+import mpi.*;
 import java.util.List;
 import java.util.HashMap;
 import java.util.*;
@@ -80,5 +81,20 @@ class DNACluster extends ICluster<char[]> {
             mean[i] = maxchar;
         }
         return mean;
+    }
+
+    static public void main(String[] args) throws MPIException {
+        MPI.Init(args);
+        int myrank = MPI.COMM_WORLD.Rank();
+        // if is the master
+        if(myrank == 0) {
+            char[] message = "Hello, there".toCharArray();
+            MPI.COMM_WORLD.Bcast(message, 0, message.length, MPI.CHAR, 0);
+        } else {
+            char[] message = new char[20];
+            MPI.COMM_WORLD.Bcast(message, 0, 20, MPI.CHAR, 0);
+            System.out.println("received:" + new String(message) + ":");
+        }
+        MPI.Finalize();
     }
 }
