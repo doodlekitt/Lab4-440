@@ -1,10 +1,40 @@
 import java.util.List;
 import java.util.HashMap;
+import java.util.*;
+import java.net.*
+import java.io.*;
 
 class DNACluster extends ICluster<char[]> {
-    public List<char[]> generate(String[] args) {
-        // TODO: Implement
-        return null;
+    public void generate(int len, int num, String filename) {
+        ArrayList<char[]> dna = new ArrayList<char[]>();
+	ArrayList<char> TACG = new ArrayList<char>();
+	TACG.add('A');
+	TACG.add('T');
+	TACG.add('G');
+	TACG.add('C');
+
+	// By randomly permuting the available DNA acids TACG each time, 
+	// build num dna strands of length len
+
+	for(int i = 0; i < num; i++){
+	    char[] dnastrand = char[len];
+	    for(int j = 0; j < len; j++){
+		Collections.shuffle(TACG);
+		dnastrand[j] = TACG.get(0);
+	    }
+	    dna.add(dnastrand);
+	}
+
+	// Write to file
+	try{
+	    FileOutputStream fs = new FileOutputStream(filename);
+	    ObjectOutputStream outfile = new ObjectOutputStream(fs);
+	    outfile.flush();
+	    outfile.writeObject(dna);
+	    outfile.close();
+	} catch (Exception e) {
+	    System.out.println(e);
+	}
     }
 
     public int distance(char[] strand1, char[] strand2) {
