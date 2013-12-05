@@ -19,7 +19,12 @@ class DataCluster extends ICluster<int[]> {
         return (int)Math.sqrt(sum);
     }
 
-    public int[] mean(List<int[]> pointss) {
+    public int[] mean(List<int[]> points) {
+        for(int i = 0; i < points.size(); i++) {
+            for(int[] point : points) {
+                // do things
+            }
+        }
         return null;
     }
 }
