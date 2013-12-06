@@ -41,7 +41,7 @@ class ParDNACluster {
         }
 
         DNACluster dc = new DNACluster();
-        intArrayComp comp = new intArrayComp();
+        charArrayComp comp = new charArrayComp();
 
         List<char[]> data = null;
         try {
@@ -151,19 +151,9 @@ class ParDNACluster {
         MPI.Finalize();
     }
 
-    private static class intArrayComp implements Comparator<char[]> {
+    private static class charArrayComp implements Comparator<char[]> {
         public int compare(char[] o1, char[] o2) {
-            for(int i = 0; i < Math.min(o1.length, o2.length); i++) {
-                if(o1[i] < o2[i])
-                    return -1;
-                else if(o1[i] > o2[i])
-                    return 1;
-            }
-            if(o1.length < o2.length)
-                return -1;
-            else if(o1.length > o2.length)
-                return 1;
-            return 0;
+            return o1.toString().compareTo(o2.toString());
         }
     }
 }

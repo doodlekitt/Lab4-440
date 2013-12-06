@@ -17,6 +17,8 @@ class DNACluster extends ICluster<char[]> {
 	// By randomly permuting the available DNA acids TACG each time, 
 	// build num dna strands of length len
 
+        System.out.println("Generating strands");
+
 	for(int i = 0; i < num; i++){
 	    char[] dnastrand = new char[len];
 	    for(int j = 0; j < len; j++){
@@ -53,8 +55,12 @@ class DNACluster extends ICluster<char[]> {
 
     // Assumes all strings of same length
     public char[] mean(List<char[]> strands) {
-        if(strands == null || strands.size() == 0)
+        if(strands == null) {
             return null;
+        }
+        if(strands.size() == 0) {
+            return new char[0];
+        }
         int strlen = strands.get(0).length;
         char[] mean = new char[strlen];
         for(int i = 0; i < strlen; i++) {
