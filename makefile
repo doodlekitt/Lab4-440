@@ -4,8 +4,8 @@ JC = mpijavac
 .java.class:
 	$(JC) $(JFLAGS) $*.java
 
-default: GenDataCluster.java ParDataCluster.java DataCluster.java GenDNACluster.java ParDNACluster.java DNACluster.java ICluster.java
-	$(JC) $(JCFLAGS) GenDataCluster.java ParDataCluster.java DataCluster.java GenDNACluster.java ParDNACluster.java DNACluster.java ICluster.java
+default: GenDataCluster.java ParDataCluster.java DataCluster.java GenDNACluster.java ParDNACluster.java DNACluster.java ICluster.java SerDataCluster.java SerDNACluster.java 
+	$(JC) $(JCFLAGS) GenDataCluster.java ParDataCluster.java DataCluster.java GenDNACluster.java ParDNACluster.java DNACluster.java ICluster.java SerDataCluster.java SerDNACluster.java
 
 clean:
 	$(RM) *.class
