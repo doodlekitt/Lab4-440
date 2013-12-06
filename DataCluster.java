@@ -13,7 +13,7 @@ class DataCluster extends ICluster<int[]> {
 	// range of 0 to range using a random generator
 
 	for(int i = 0; i < num; i++){
-	    int[] vector =  int[len]; 
+	    int[] vector = new int[len]; 
 	    for(int j = 0; j < len; j++){
 		vector[j] = rand.nextInt(range + 1);
 	    }

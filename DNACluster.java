@@ -2,13 +2,13 @@ import mpi.*;
 import java.util.List;
 import java.util.HashMap;
 import java.util.*;
-import java.net.*
+import java.net.*;
 import java.io.*;
 
 class DNACluster extends ICluster<char[]> {
     public void generate(int len, int num, String filename) {
-        ArrayList<char[]> dna = new ArrayList<char[]>();
-	ArrayList<char> TACG = new ArrayList<char>();
+        List<char[]> dna = new ArrayList<char[]>();
+	List<Character> TACG = new ArrayList<Character>();
 	TACG.add('A');
 	TACG.add('T');
 	TACG.add('G');
@@ -18,7 +18,7 @@ class DNACluster extends ICluster<char[]> {
 	// build num dna strands of length len
 
 	for(int i = 0; i < num; i++){
-	    char[] dnastrand = char[len];
+	    char[] dnastrand = new char[len];
 	    for(int j = 0; j < len; j++){
 		Collections.shuffle(TACG);
 		dnastrand[j] = TACG.get(0);
