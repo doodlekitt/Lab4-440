@@ -77,9 +77,10 @@ class ParDNACluster {
                 }
                 for(char[] elem : data) {
                     int mindist = Integer.MAX_VALUE;
-                        char[] mincent = null;
-                        for(char[] c : centroids) {
-                            int dist = dc.distance(elem, c);
+                    char[] mincent = null;
+                    for(char[] c : centroids) {
+                        int dist = dc.distance(elem, c);
+System.out.println("Distance between " + new String(elem) + " and " + new String(c) + " is " + dist);
                         if(dist < mindist) {
                             mindist = dist;
                             mincent = c;

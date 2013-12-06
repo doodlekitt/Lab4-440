@@ -8,22 +8,21 @@ import java.io.*;
 class DNACluster extends ICluster<char[]> {
     public void generate(int len, int num, String filename) {
         List<char[]> dna = new ArrayList<char[]>();
-	List<Character> TACG = new ArrayList<Character>();
-	TACG.add('A');
-	TACG.add('T');
-	TACG.add('G');
-	TACG.add('C');
+        char[] TACG = new char[4];
+        TACG[0] = 'T';
+        TACG[1] = 'A';
+        TACG[2] = 'C';
+        TACG[3] = 'G';
 
 	// By randomly permuting the available DNA acids TACG each time, 
 	// build num dna strands of length len
 
-        System.out.println("Generating strands");
+        Random rand = new Random();
 
 	for(int i = 0; i < num; i++){
 	    char[] dnastrand = new char[len];
 	    for(int j = 0; j < len; j++){
-		Collections.shuffle(TACG);
-		dnastrand[j] = TACG.get(0);
+		dnastrand[j] = TACG[rand.nextInt(4)];
 	    }
 	    dna.add(dnastrand);
 	}
@@ -79,7 +78,8 @@ class DNACluster extends ICluster<char[]> {
             int max = 0;
             char maxchar = 'G';
             for(Character c : freqs.keySet()) {
-                if(freqs.get(c) > max) {
+                if(freqs.get(c) > max ||
+                   ((freqs.get(c) == max) && Math.random() < .5)) {
                     max = freqs.get(c);
                     maxchar = c;
                 }
