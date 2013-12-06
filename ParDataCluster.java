@@ -4,6 +4,7 @@ import mpi.*;
 
 class ParDataCluster {
 
+    @SuppressWarnings("serial")
     public static class Message implements Serializable {
         public enum Type {
             FINALIZE, MEAN;
@@ -31,8 +32,6 @@ class ParDataCluster {
     }
 
     public static void main(String[] args) throws MPIException {
-        MPI.Init(args);
-
         if(args.length != 2) {
             String message = "Expects arguments of the form:\n";
             message += "<filename> <k>\n";
@@ -49,13 +48,17 @@ class ParDataCluster {
         try {
             ObjectInputStream ois =
                 new ObjectInputStream(new FileInputStream(args[0]));
-            data = (List<int[]>) ois.readObject();
+            @SuppressWarnings("unchecked")
+            List<int[]> suppresshelper = (List<int[]>) ois.readObject();
+            data = suppresshelper;
         } catch (Exception e) {
             System.out.println("ERROR: Could not read data from file");
             return;
         }
         int k = Integer.valueOf(args[1]).intValue();
         int datalen = data.get(0).length;
+
+        MPI.Init(args);
 
         int myrank = MPI.COMM_WORLD.Rank();
         int size = MPI.COMM_WORLD.Size();
@@ -100,10 +103,15 @@ class ParDataCluster {
                 }
                 MPI.COMM_WORLD.Bcast(messages, 0, k, MPI.OBJECT, 0);
 
+                // node to listen to
+                int node = 1;
                 for(int i = 0; i < k; i++) {
                     int[] newcentroid = new int[datalen];
-                    MPI.COMM_WORLD.Recv(newcentroid, 0, datalen, MPI.INT, 0, 99);
+                    MPI.COMM_WORLD.Recv(newcentroid,0,datalen,MPI.INT,node,99);
                     newcentroids.add(newcentroid);
+                    node++;
+                    if(node >= MPI.COMM_WORLD.Size())
+                        node = 1;
                 }
                 // sort centroids
                 Collections.sort(newcentroids, comp);
@@ -119,7 +127,14 @@ class ParDataCluster {
             Message[] kill = new Message[1];
             kill[0] = new Message(Message.Type.FINALIZE);
             MPI.COMM_WORLD.Bcast(kill, 0, 1, MPI.OBJECT, 0);
-            System.out.println(centroids);
+
+            // Print results
+            System.out.println("Found centroids");
+            for(int[] centroid : centroids) {
+                for(int i = 0; i < centroid.length; i++)
+                    System.out.print(centroid[i] + ", ");
+                System.out.println("");
+            }
         } else {
             while(true) {
                 Message[] messages = new Message[k];
@@ -127,7 +142,8 @@ class ParDataCluster {
                 if(messages[0].type() == Message.Type.FINALIZE)
                     break;
                 for(int i = myrank-1; i < k; i+= MPI.COMM_WORLD.Size()-1) {
-                    int[] centroid = dc.mean(messages[i].task());
+                    List<int[]> cluster = messages[i].task();
+                    int[] centroid = dc.mean(cluster);
                     MPI.COMM_WORLD.Send(centroid, 0, centroid.length, MPI.INT,
                                         0, 99);
                 }

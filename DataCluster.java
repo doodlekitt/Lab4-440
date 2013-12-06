@@ -5,16 +5,16 @@ import java.util.*;
 import java.net.*;
 
 class DataCluster extends ICluster<int[]> {
-    public void generate(int len, int num, int range, String filename) {
+    public static void generate(int dim, int num, int range, String filename) {
 	ArrayList<int[]> points = new ArrayList<int[]>();
 	Random rand = new Random();
 
-	// Loop through and generate num points of length len within the 
+	// Loop through and generate num points of length dim within the 
 	// range of 0 to range using a random generator
 
 	for(int i = 0; i < num; i++){
-	    int[] vector = new int[len]; 
-	    for(int j = 0; j < len; j++){
+	    int[] vector = new int[dim]; 
+	    for(int j = 0; j < dim; j++){
 		vector[j] = rand.nextInt(range + 1);
 	    }
 	    points.add(vector);
@@ -49,11 +49,17 @@ class DataCluster extends ICluster<int[]> {
     }
 
     public int[] mean(List<int[]> points) {
-        for(int i = 0; i < points.size(); i++) {
+        if(points == null || points.size() == 0)
+            return null;
+        int length = points.get(0).length;
+        int[] mean = new int[length];
+        for(int i = 0; i < length; i++) {
+            int sum = 0;
             for(int[] point : points) {
-                // do things
+                sum += point[i];
             }
+            mean[i] = sum / points.size();
         }
-        return null;
+        return mean;
     }
 }
